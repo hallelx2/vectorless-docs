@@ -6,29 +6,36 @@
 
 /* ============================================================
    Vectorless brand tokens
-   Palette lifted from the brand compositions (vectorless-why):
-     blue   #1456F0  ->  #3B82F6
-     pink   #EA5EC1
-     ink    #0A0A0A
+   Source of truth: vectorless-why/DESIGN.md + dashboard globals.css
+   The brand is LIGHT — a near-white canvas, plain and precise,
+   "a whitepaper that came alive." Dark surfaces are reserved for
+   code/terminal blocks only.
+     canvas #FCFCFD  ink #0A0A0A  secondary #3F3F46  muted #71717A
+     hairline #E5E7EB
+     signal gradient: blue #1456F0 -> pink #EA5EC1 (one hero line)
    ============================================================ */
 :root {
+  --vl-canvas: #fcfcfd;
+  --vl-ink: #0a0a0a;
+  --vl-secondary: #3f3f46;
+  --vl-muted: #71717a;
+  --vl-hairline: #e5e7eb;
   --vl-blue: #1456f0;
   --vl-blue-2: #3b82f6;
   --vl-pink: #ea5ec1;
-  --vl-ink: #0a0a0a;
-  --vl-emerald: #10b981;
+  --vl-grid: rgba(20, 86, 240, 0.06);
 
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --font-serif: var(--font-instrument-serif), Georgia, serif;
 }
 
-/* ---- Light theme (secondary) ---- */
+/* ---- Light theme (DEFAULT — the brand) ---- */
 :root {
   --color-fd-background: #fcfcfd;
   --color-fd-foreground: #0a0a0a;
   --color-fd-muted: #f4f5f7;
-  --color-fd-muted-foreground: #61656e;
+  --color-fd-muted-foreground: #71717a;
   --color-fd-popover: #ffffff;
   --color-fd-popover-foreground: #0a0a0a;
   --color-fd-card: #ffffff;
@@ -37,13 +44,13 @@
   --color-fd-primary: #1456f0;
   --color-fd-primary-foreground: #ffffff;
   --color-fd-secondary: #f4f5f7;
-  --color-fd-secondary-foreground: #0a0a0a;
+  --color-fd-secondary-foreground: #3f3f46;
   --color-fd-accent: #eef2ff;
   --color-fd-accent-foreground: #1456f0;
   --color-fd-ring: #1456f0;
 }
 
-/* ---- Dark theme (primary) ---- */
+/* ---- Dark theme (optional toggle — not the default) ---- */
 .dark {
   --color-fd-background: #0a0a0a;
   --color-fd-foreground: #f5f6f8;
@@ -74,6 +81,8 @@ html > body[data-scroll-locked] {
 }
 
 body {
+  /* Body weight ~300, per DESIGN.md — plain and precise. */
+  font-weight: 300;
   font-feature-settings: 'ss01', 'cv01';
 }
 
@@ -85,60 +94,16 @@ kbd,
 }
 
 /* ============================================================
-   Grid background texture — subtle, masked, brand-blue lines.
-   Applied to the whole app behind content.
+   NO heavy grid wash, NO aura/glow on the page background.
+   The canvas is clean near-white with whitespace. (The faint
+   landing-hero grid lives on the hero element itself, below.)
    ============================================================ */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: -2;
-  pointer-events: none;
-  background-image:
-    linear-gradient(to right, rgba(20, 86, 240, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(20, 86, 240, 0.04) 1px, transparent 1px);
-  background-size: 56px 56px;
-  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 10%, transparent 75%);
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 10%, transparent 75%);
-}
-
-.dark body::before {
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
-}
-
-/* Aura glow that anchors the top of the page */
-body::after {
-  content: '';
-  position: fixed;
-  top: -260px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(1400px, 120vw);
-  height: 700px;
-  z-index: -2;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(20, 86, 240, 0.1) 0%,
-    rgba(234, 94, 193, 0.07) 42%,
-    transparent 72%
-  );
-}
-
-.dark body::after {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(20, 86, 240, 0.18) 0%,
-    rgba(234, 94, 193, 0.1) 45%,
-    transparent 72%
-  );
-}
 
 /* ============================================================
    Brand utilities
    ============================================================ */
+
+/* The ONE signal gradient — used on a single hero line only. */
 .vl-grad-text {
   background: linear-gradient(100deg, var(--vl-blue), var(--vl-blue-2) 45%, var(--vl-pink));
   -webkit-background-clip: text;
@@ -153,21 +118,46 @@ body::after {
 
 .vl-mono-eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.22em;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--vl-blue-2);
+  color: var(--vl-muted);
+  font-weight: 500;
+}
+
+/* Very faint brand grid — landing hero ONLY, masked to fade out. */
+.vl-hero-grid {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, var(--vl-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--vl-grid) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 30%, #000 0%, transparent 70%);
+  mask-image: radial-gradient(ellipse 70% 55% at 50% 30%, #000 0%, transparent 70%);
+}
+
+.dark .vl-hero-grid {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Headlines lean into Geist's tight tracking (−0.03em on display). */
+.prose h1,
+h1 {
+  letter-spacing: -0.03em;
   font-weight: 600;
 }
 
-/* Headings lean into Geist's tight tracking */
-.prose h1,
-h1,
-h2 {
-  letter-spacing: -0.025em;
+h2,
+h3 {
+  letter-spacing: -0.02em;
 }
 
-/* Nav title + active accents use the gradient where it reads well */
+/* Nav active accent */
 #nd-nav a[data-active='true'] {
   color: var(--color-fd-primary);
 }

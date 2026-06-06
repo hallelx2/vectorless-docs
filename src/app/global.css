@@ -1,0 +1,173 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+@source '../**/*.{ts,tsx}';
+
+/* ============================================================
+   Vectorless brand tokens
+   Palette lifted from the brand compositions (vectorless-why):
+     blue   #1456F0  ->  #3B82F6
+     pink   #EA5EC1
+     ink    #0A0A0A
+   ============================================================ */
+:root {
+  --vl-blue: #1456f0;
+  --vl-blue-2: #3b82f6;
+  --vl-pink: #ea5ec1;
+  --vl-ink: #0a0a0a;
+  --vl-emerald: #10b981;
+
+  --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --font-serif: var(--font-instrument-serif), Georgia, serif;
+}
+
+/* ---- Light theme (secondary) ---- */
+:root {
+  --color-fd-background: #fcfcfd;
+  --color-fd-foreground: #0a0a0a;
+  --color-fd-muted: #f4f5f7;
+  --color-fd-muted-foreground: #61656e;
+  --color-fd-popover: #ffffff;
+  --color-fd-popover-foreground: #0a0a0a;
+  --color-fd-card: #ffffff;
+  --color-fd-card-foreground: #0a0a0a;
+  --color-fd-border: #e5e7eb;
+  --color-fd-primary: #1456f0;
+  --color-fd-primary-foreground: #ffffff;
+  --color-fd-secondary: #f4f5f7;
+  --color-fd-secondary-foreground: #0a0a0a;
+  --color-fd-accent: #eef2ff;
+  --color-fd-accent-foreground: #1456f0;
+  --color-fd-ring: #1456f0;
+}
+
+/* ---- Dark theme (primary) ---- */
+.dark {
+  --color-fd-background: #0a0a0a;
+  --color-fd-foreground: #f5f6f8;
+  --color-fd-muted: #121214;
+  --color-fd-muted-foreground: #a1a1aa;
+  --color-fd-popover: #0e0e10;
+  --color-fd-popover-foreground: #f5f6f8;
+  --color-fd-card: #101012;
+  --color-fd-card-foreground: #f5f6f8;
+  --color-fd-border: rgba(255, 255, 255, 0.09);
+  --color-fd-primary: #5b8bff;
+  --color-fd-primary-foreground: #06070a;
+  --color-fd-secondary: #16161a;
+  --color-fd-secondary-foreground: #f5f6f8;
+  --color-fd-accent: #16161a;
+  --color-fd-accent-foreground: #f5f6f8;
+  --color-fd-ring: #5b8bff;
+}
+
+html {
+  scrollbar-gutter: stable;
+  font-family: var(--font-sans);
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0px !important;
+  --removed-body-scroll-bar-size: 0px !important;
+}
+
+body {
+  font-feature-settings: 'ss01', 'cv01';
+}
+
+code,
+pre,
+kbd,
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* ============================================================
+   Grid background texture — subtle, masked, brand-blue lines.
+   Applied to the whole app behind content.
+   ============================================================ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right, rgba(20, 86, 240, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(20, 86, 240, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 10%, transparent 75%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 10%, transparent 75%);
+}
+
+.dark body::before {
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+}
+
+/* Aura glow that anchors the top of the page */
+body::after {
+  content: '';
+  position: fixed;
+  top: -260px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1400px, 120vw);
+  height: 700px;
+  z-index: -2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(20, 86, 240, 0.1) 0%,
+    rgba(234, 94, 193, 0.07) 42%,
+    transparent 72%
+  );
+}
+
+.dark body::after {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(20, 86, 240, 0.18) 0%,
+    rgba(234, 94, 193, 0.1) 45%,
+    transparent 72%
+  );
+}
+
+/* ============================================================
+   Brand utilities
+   ============================================================ */
+.vl-grad-text {
+  background: linear-gradient(100deg, var(--vl-blue), var(--vl-blue-2) 45%, var(--vl-pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.vl-serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
+
+.vl-mono-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--vl-blue-2);
+  font-weight: 600;
+}
+
+/* Headings lean into Geist's tight tracking */
+.prose h1,
+h1,
+h2 {
+  letter-spacing: -0.025em;
+}
+
+/* Nav title + active accents use the gradient where it reads well */
+#nd-nav a[data-active='true'] {
+  color: var(--color-fd-primary);
+}

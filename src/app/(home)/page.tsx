@@ -85,12 +85,13 @@ export default function HomePage() {
   useGsapEffect(ref, (root) => {
     const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
 
-    tl.from('.hero-mark', { y: 20, opacity: 0, duration: 0.8 })
-      .from('.hero-chip', { y: 14, opacity: 0, duration: 0.8 }, '-=0.4')
+    tl.from('.hero-mark', { autoAlpha: 0, y: 20, duration: 0.8 })
+      .from('.hero-chip', { autoAlpha: 0, y: 14, duration: 0.8 }, '-=0.4')
       .from('.hero-line > span', { yPercent: 110, duration: 1.2, stagger: 0.1 }, '-=0.6')
-      .from('.hero-sub', { y: 20, opacity: 0, duration: 0.9 }, '-=0.8')
-      .from('.hero-cta > *', { y: 12, opacity: 0, duration: 0.7, stagger: 0.1 }, '-=0.6')
-      .from('.hero-terminal', { y: 20, opacity: 0, duration: 1.2 }, '-=0.4');
+      .from('.hero-sub', { autoAlpha: 0, y: 20, duration: 0.9 }, '-=0.8')
+      .set('.hero-cta', { autoAlpha: 1 }) // Reveal the container first
+      .from('.hero-cta > *', { autoAlpha: 0, y: 12, duration: 0.7, stagger: 0.1 }, '-=0.6')
+      .from('.hero-terminal', { autoAlpha: 0, y: 20, duration: 1.2 }, '-=0.4');
 
     gsap.fromTo(
       '.hero-stroke',
@@ -144,15 +145,15 @@ export default function HomePage() {
           No chunking. No embeddings. No vector DB. Vectorless parses documents into structured maps any LLM can navigate — <span className="text-vl-ink font-medium">precision retrieval with citations you can trust.</span>
         </p>
 
-        <div className="hero-cta relative z-10 mt-12 flex flex-wrap items-center justify-center gap-4">
+        <div className="hero-cta relative z-20 mt-12 flex flex-wrap items-center justify-center gap-4 gsap-hidden">
           <Link
             href="/docs"
-            className="group relative inline-flex items-center gap-3 bg-vl-ink text-white pl-7 pr-3 py-3 rounded-full text-[15px] font-medium transition hover:bg-black"
+            className="group relative inline-flex items-center gap-3 bg-vl-ink text-white pl-8 pr-3 py-3.5 rounded-full text-[16px] font-medium transition hover:bg-black"
           >
             <span className="text-roll">
               <span className="text-roll-inner">
-                <span>Start building</span>
-                <span>Start building</span>
+                <span>Read documentation</span>
+                <span>Read documentation</span>
               </span>
             </span>
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white">
@@ -161,7 +162,7 @@ export default function HomePage() {
           </Link>
           <Link
             href="https://github.com/hallelx2/vectorless"
-            className="inline-flex items-center gap-2 text-[15px] font-medium text-vl-ink px-6 py-3.5 rounded-full border border-vl-hairline bg-white/50 backdrop-blur-sm hover:bg-white transition-colors"
+            className="inline-flex items-center gap-2 text-[16px] font-medium text-vl-ink px-8 py-4 rounded-full border border-vl-hairline bg-white/50 backdrop-blur-sm hover:bg-white transition-colors"
           >
             <GithubIcon /> View on GitHub
           </Link>

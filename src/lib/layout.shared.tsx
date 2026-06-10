@@ -34,12 +34,18 @@ export function baseOptions(): BaseLayoutProps {
   return {
     nav: {
       title: <VectorlessMark />,
+      transparentMode: 'top',
     },
     links: [
       {
         text: 'Documentation',
         url: '/docs',
         active: 'nested-url',
+      },
+      {
+        text: 'Engine',
+        url: 'https://github.com/hallelx2/vectorless-engine',
+        external: true,
       },
     ],
     githubUrl: `https://github.com/${gitConfig.user}/${gitConfig.repo}`,
